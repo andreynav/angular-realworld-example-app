@@ -7,6 +7,8 @@ describe("Signup & Login", () => {
   }
 
   it("Test Valid Signup", () => {
+    cy.intercept("POST", "**/*.realworld.io/api/users").as("newUser")
+
     cy.visit("http://localhost:4200/")
 
     cy.get('li a[routerlink="/register"]').click()
@@ -19,5 +21,13 @@ describe("Signup & Login", () => {
 
     cy.url().should("include", "http://localhost:4200")
     cy.get('li a').contains(user.username)
+    cy.wait('@newUser').then(({response}) => {
+      expect(response.statusCode).to.eq(200)
+      expect(response.body.user).to.have.property('email', user.email)
+      expect(response.body.user).to.have.property('username', user.username)
+      cy.log(JSON.stringify(response.body))
+      expect(response.body.user).to.have.property('image')
+      expect(response.body.user).to.have.property('token')
+    })
   })
 })
