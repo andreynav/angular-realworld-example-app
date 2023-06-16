@@ -1,0 +1,47 @@
+{
+  "articles": [
+    {
+      "slug": "Test title 1",
+      "title": "Test title 1",
+      "description": "Test description 1. Test description 1. Test description 1.",
+      "body": "Test body 1. Test body 1. Test body 1.",
+      "tagList": [
+        "React",
+        "Redux",
+        "Cypress"
+      ],
+      "createdAt": "2022-12-09T13:46:24.264Z",
+      "updatedAt": "2022-12-09T13:46:24.264Z",
+      "favorited": false,
+      "favoritesCount": 1104,
+      "author": {
+        "username": "Andy Nav",
+        "bio": null,
+        "image": "https://api.realworld.io/images/demo-avatar.png",
+        "following": false
+      }
+    },
+    {
+      "slug": "Test title 2",
+      "title": "Test title 2",
+      "description": "Test description 2. Test description 2. Test description 2.",
+      "body": "Test body 2. Test body 2. Test body 2.",
+      "tagList": [
+        "React",
+        "Redux",
+        "Cypress"
+      ],
+      "createdAt": "2022-12-09T13:46:24.264Z",
+      "updatedAt": "2022-12-09T13:46:24.264Z",
+      "favorited": false,
+      "favoritesCount": 1104,
+      "author": {
+        "username": "Andy Nav",
+        "bio": null,
+        "image": "https://api.realworld.io/images/demo-avatar.png",
+        "following": false
+      }
+    }
+  ],
+  "articlesCount": 2
+}
