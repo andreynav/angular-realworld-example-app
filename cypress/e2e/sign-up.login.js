@@ -33,7 +33,7 @@ describe("Signup & Login", () => {
     })
   })
 
-  it("Test Sign In", () => {
+  it.skip("Test Sign In", () => {
     cy.intercept("POST", "**/*.realworld.io/api/users/login").as("loginUser")
 
     cy.get('li a[href="/login"]').click()
@@ -49,6 +49,26 @@ describe("Signup & Login", () => {
       cy.log(JSON.stringify(response.body))
       cy.log(JSON.stringify(request.body))
     })
+  })
+
+  it("Test Sign In & mock popular test", () => {
+    cy.intercept("GET", "**/tags", {fixture: "popular-tags.json"}).as("popularTags")
+
+    cy.get('li a[href="/login"]').click()
+    cy.url().should("include", "/login")
+
+    cy.get('input[ng-reflect-name="email"]').type(user.email)
+    cy.get('input[ng-reflect-name="password"]').type(user.password)
+    cy.get('button').contains('Sign in').click()
+
+    cy.url().should("include", "http://localhost:4200")
+    cy.get('li a').contains(user.username)
+    cy.wait('@popularTags').then(({ response}) => {
+      cy.log(JSON.stringify(response.body))
+      expect(response.statusCode).to.eq(200)
+      expect(response.body.tags).to.deep.eq(['React', 'Cypress', 'Redux', 'Reqct-query'])
+    })
+    cy.get('.tag-list').should('contain', 'React', 'Cypress', 'Redux', 'Reqct-query')
   })
 
 })
