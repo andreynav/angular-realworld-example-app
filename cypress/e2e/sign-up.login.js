@@ -33,7 +33,7 @@ describe("Signup & Login", () => {
     })
   })
 
-  it.skip("Test Sign In", () => {
+  it("Test Sign In", () => {
     cy.intercept("POST", "**/*.realworld.io/api/users/login").as("loginUser")
 
     cy.get('li a[href="/login"]').click()
@@ -51,7 +51,7 @@ describe("Signup & Login", () => {
     })
   })
 
-  it("Test Sign In & mock popular test", () => {
+  it.skip("Test Sign In & mock popular test", () => {
     cy.intercept("GET", "**/tags", {fixture: "popular-tags.json"}).as("popularTags")
 
     cy.get('li a[href="/login"]').click()
@@ -69,6 +69,22 @@ describe("Signup & Login", () => {
       expect(response.body.tags).to.deep.eq(['React', 'Cypress', 'Redux', 'Reqct-query'])
     })
     cy.get('.tag-list').should('contain', 'React', 'Cypress', 'Redux', 'Reqct-query')
+  })
+
+  it("Mock global feed data", () => {
+    cy.intercept("GET", "**/articles*", {fixture: "global-feed.json"}).as("globalFeed")
+
+    cy.get('li a').contains('Global Feed').click()
+
+    cy.wait('@globalFeed').then(({response}) => {
+      cy.log(JSON.stringify(response.body))
+      expect(response.statusCode).to.eq(200)
+      expect(response.body.articles).to.have.length(2)
+      expect(response.body.articles[0].slug).to.eq('Test title 1')
+      expect(response.body.articles[0].title).to.eq('Test title 1')
+      expect(response.body.articles[1].slug).to.eq('Test title 2')
+      expect(response.body.articles[1].title).to.eq('Test title 2')
+    })
   })
 
 })
