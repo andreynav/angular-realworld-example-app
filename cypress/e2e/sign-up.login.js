@@ -6,13 +6,15 @@ describe("Signup & Login", () => {
     password: 'andy'
   }
 
+  beforeEach(() => {
+    cy.visit("http://localhost:4200/")
+  })
+
   it("Test Valid Signup", () => {
     cy.intercept("POST", "**/*.realworld.io/api/users").as("newUser")
 
-    cy.visit("http://localhost:4200/")
-
     cy.get('li a[routerlink="/register"]').click()
-    cy.url().should("include", "http://localhost:4200/register")
+    cy.url().should("include", "/register")
 
     cy.get('input[ng-reflect-name="username"]').type(user.username)
     cy.get('input[ng-reflect-name="email"]').type(user.email)
@@ -30,4 +32,23 @@ describe("Signup & Login", () => {
       expect(response.body.user).to.have.property('token')
     })
   })
+
+  it("Test Sign In", () => {
+    cy.intercept("POST", "**/*.realworld.io/api/users/login").as("loginUser")
+
+    cy.get('li a[href="/login"]').click()
+    cy.url().should("include", "/login")
+
+    cy.get('input[ng-reflect-name="email"]').type(user.email)
+    cy.get('input[ng-reflect-name="password"]').type(user.password)
+    cy.get('button').contains('Sign in').click()
+
+    cy.url().should("include", "http://localhost:4200")
+    cy.get('li a').contains(user.username)
+    cy.wait('@loginUser').then(({request, response}) => {
+      cy.log(JSON.stringify(response.body))
+      cy.log(JSON.stringify(request.body))
+    })
+  })
+
 })
